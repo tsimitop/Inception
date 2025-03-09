@@ -1,0 +1,48 @@
+example:
+# Ignore version control files
+.git/
+.gitignore
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+logs/
+*.log
+tmp/
+cache/
+*.pid
+*.sock
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+*.swp
+
+# Ignore compiled files
+*.o
+*.out
+*.a
+*.so
+
+# Ignore environment and secret files
+.env
+.env.local
+*.pem
+*.crt
+*.key
+
+# Ignore Nginx auto-generated files
+nginx/logs/
+nginx/tmp/
+
+# Ignore WordPress uploads and cache
+wordpress/wp-content/uploads/
+wordpress/wp-content/cache/
+
+# Ignore MariaDB data directory (optional, if using named volumes)
+mariadb/data/
+
+# Ignore build files
+docker-compose.override.yml
