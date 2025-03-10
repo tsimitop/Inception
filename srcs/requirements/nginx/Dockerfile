@@ -1,6 +1,9 @@
 # some Debian
-FROM 
-
+FROM debian:bullseye
+FROM debian:buster
+FROM debian:bookworm
+FROM debian:stable
+FROM debian:bookworm-slim
 # update VMs resources (ie.apk), add basic utilities (vim , curl, sudo etc.)
 RUN apt-get update && apt-get install -y nginx openssl && apt-get clean && rm -rf /var/lib/apt/lists/*
 #rm -rf /var/lib/apt/lists/*: removes cached package lists to keep the image small, do not upgrade, extra space and possible mismatches
@@ -8,7 +11,14 @@ RUN apt-get update && apt-get install -y nginx openssl && apt-get clean && rm -r
 # apt-get autoclean -> Deletes only outdated package files that can no longer be downloaded.
 
 # establish safe tls 2 and 3 connection
-RUN 
+RUN	mkdir -p /etc/nginx/ssl && 
+	openssl req
+	-x509
+	-nodes
+	-out /etc/nginx/ssl/inception.crt
+	-keyout /etc/nginx/ssl/inception.key
+	-subj "/C=DE/ST=Baden-Wuttemberg/L=Heilbronn/O=Anonymous.inc/OU=supersecret/CN=CN=tsimitop.42.fr"
+
 # X.509 is a standard format for public key certificates used in SSL/TLS for websites, email encryption, and authentication.
 # It contains the public key, issuer information, validity period, and a digital signature.
 # This command creates a self-signed certificate, meaning:
@@ -57,4 +67,4 @@ EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
 
 # launch a certain command when the container is launched.
-ENTRYPOINT 
+# ENTRYPOINT 
