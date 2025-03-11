@@ -1,4 +1,29 @@
-version of compound: some debian
+version of compound: '3.8'
+
+services:
+	wordpress: wordpress:penultimate
+		image:
+		container_name: wordpress
+		restart: always
+		volumes:
+		- ./conf:/var/www/html
+    environment:
+
+	mariadb:
+		image: mariadb:penultimate
+		container_name: mariadb
+		restart: always
+    environment:
+
+	nginx:
+		image: nginx:penultimate
+		container_name: nginx
+		restart: always
+
+
+
+
+
 --------------------------------------------------
 services:
   my_ubuntu:
@@ -78,3 +103,19 @@ Bash
 Similarly, to delete our container, we can rely on what we have already learned or use the following command.
 
 docker compose rm
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: always
+    volumes:
+      - ./conf:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: your_database_user
+      WORDPRESS_DB_PASSWORD: your_database_password
+      WORDPRESS_DB_NAME: your_database_name
+    entrypoint: ["/bin/bash", "-c", "/usr/local/bin/auto_config.sh && docker-entrypoint.sh apache2-foreground"]
+    depends_on:
+      - mariadb
