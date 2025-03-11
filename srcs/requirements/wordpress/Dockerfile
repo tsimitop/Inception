@@ -5,13 +5,16 @@ FROM debian:bookworm
 FROM debian:stable
 FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install -y mariadb-server && apt-get clean && rm -rf /var/lib/apt/lists/*
+#php7.3 check for other
+RUN apt-get update && apt-get install -y wget php7.4 php-fpm php-mysql mariadb-client && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# should I call it 50-server.cnf, check paths
-#/etc/mysql/mariadb.conf.d/ or /etc/mysql/conf.d/
-COPY ./conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
-COPY tools/db_init.sql /usr/local/bin/db_init.sql
-COPY tools/db_script.sh /usr/local/bin/db_script.sh
+RUN wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
+RUN cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
+RUN chown -R root:root /var/www/wordpress
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
 EXPOSE 3306
 
