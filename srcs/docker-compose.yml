@@ -1,12 +1,22 @@
-# version: '3.8'
 
 services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
     ports:
-      - "8080:80"
-      - "8081:443"
+      - "8090:80"
+      - "8092:443"
+    volumes:
+      - .web:/var/www/html
+
+  wordpress:
+    build: ./requirements/wordpress
+    ports:
+      - "8099:80"
+      - "8091:443"
+    container_name: wp-php
+    volumes:
+      - .web:/var/www/html
 
 # services:
 # 	wordpress: wordpress:penultimate

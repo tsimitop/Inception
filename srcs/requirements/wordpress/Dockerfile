@@ -1,29 +1,38 @@
 # some Debian
-FROM debian:bullseye
-FROM debian:buster
-FROM debian:bookworm
-FROM debian:stable
+# FROM debian:bullseye
+# FROM debian:buster
+# FROM debian:bookworm
+# FROM debian:stable
 FROM debian:bookworm-slim
 
-#php7.3 check for other
-RUN apt-get update && apt-get install -y wget php7.4 php-fpm php-mysql mariadb-client && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y php-fpm && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
-RUN cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
-RUN chown -R root:root /var/www/wordpress
+COPY conf/www.conf /etc/php/8.2/fpm/pool.d
 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+CMD ["php-fpm8.2", "-F"]
 
-COPY conf/config.sh /usr/local/bin/config.sh
-RUN chmod +x /usr/local/bin/config.sh
+# /etc/php/8.2/fpm/pool.d/www.conf
+# /etc/nginx/sites-available/default
+
+# RUN apt-get update && apt-get install -y wget php7.4 php-fpm php-mysql mariadb-client && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# RUN wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
+# RUN cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
+# RUN chown -R root:root /var/www/wordpress
+
+# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# RUN chmod +x wp-cli.phar
+# RUN mv wp-cli.phar /usr/local/bin/wp
+
+# COPY conf/config.sh /usr/local/bin/config.sh
+# RUN chmod +x /usr/local/bin/config.sh
 
 
-EXPOSE 3306
+# EXPOSE 3306
 
 #check path
-CMD ["/usr/local/bin/db_script.sh"]
+# CMD ["php-fpm8.2", "-F"]
+# CMD ["/usr/local/bin/db_script.sh"]
 
 
 # #____________________________________________________________
