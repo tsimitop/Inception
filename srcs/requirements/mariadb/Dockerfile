@@ -8,13 +8,10 @@ COPY tools/db_script.sh /etc/mysql/db_script.sh
 
 RUN chmod +x /etc/mysql/db_script.sh
 
-# RUN mkdir -p /run/mysqld
-RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+RUN mkdir -p /run/mysqld
+# RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
 COPY tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-# CMD ["mysqld"]
-# CMD ["mysqld_safe"]
