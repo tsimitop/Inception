@@ -1,3 +1,28 @@
+all: create_env build_all
+
+create_env:
+	@if [ -f "srcs/.env" ]; then \
+		echo ".env exists"; \
+	else \
+		echo "Creating .env"; \
+		python3 srcs/environment.py; \
+	fi
+
+logs: 
+	docker logs nginx && docker logs mariadb && docker logs wordpress
+
+abolish: sr_all delete_volumes
+	cd srcs && rm .env
+
+delete_env:
+	cd srcs && rm .env
+
+delete_volumes:
+	cd srcs/ && rm -rf wordpress_vol && cd .. && docker volume rm srcs_mariadb_vol 
+#srcs_wordpress_vol
+
+# enter database prompt
+# docker exec -it mariadb mysql -u root -p
 # __________________________GENERAL__________________________
 
 rebuild:
