@@ -1,11 +1,18 @@
 # __________________________GENERAL__________________________
+
+rebuild:
+	cd srcs && docker-compose build --no-cache
+
 build_all:
 	cd srcs && docker-compose up -d --build
 
-sr_all: nsr wpsr
+build_fast:
+	cd srcs && docker-compose up -d
 
-interact_all:
-	docker exec -it /bin/bash
+sr_all: nsr wpsr msr
+
+# interact_all:
+# 	docker exec -it /bin/bash
 
 # ___________________________NGINX___________________________
 ssh-nginx:
@@ -33,15 +40,21 @@ build_wp:
 	cd srcs/requirements/wordpress && docker-compose up -d --build
 
 wpstop:
-	cd srcs/requirements/wordpress && docker stop wp-php
+	cd srcs/requirements/wordpress && docker stop wordpress
 
 wprm:
-	cd srcs/requirements/wordpress && docker rm wp-php
+	cd srcs/requirements/wordpress && docker rm wordpress
 
 wpsr:
-	cd srcs/requirements/wordpress && docker stop wp-php && docker rm wp-php
+	cd srcs/requirements/wordpress && docker stop wordpress && docker rm wordpress
 
 wpinteract:
-	docker exec -it wp-php /bin/bash
+	docker exec -it wordpress /bin/bash
 
 # __________________________MARIADB___________________________
+
+minteract:
+	docker exec -it mariadb /bin/bash
+
+msr:
+	cd srcs/requirements/mariadb && docker stop mariadb && docker rm mariadb

@@ -1,30 +1,20 @@
-# some Debian
-FROM debian:bullseye
-FROM debian:buster
-FROM debian:bookworm
-FROM debian:stable
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
-RUN apt-get update && apt-get install -y mariadb-server && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y mariadb-server && rm -rf /var/lib/apt/lists/*
 
-# should I call it 50-server.cnf, check paths
-#/etc/mysql/mariadb.conf.d/ or /etc/mysql/conf.d/
-COPY ./conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
-COPY tools/db_init.sql /usr/local/bin/db_init.sql
-COPY tools/db_script.sh /usr/local/bin/db_script.sh
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-EXPOSE 3306
+COPY tools/db_script.sh /etc/mysql/db_script.sh
 
-#check path
-CMD ["/usr/local/bin/db_script.sh"]
+RUN chmod +x /etc/mysql/db_script.sh
 
+# RUN mkdir -p /run/mysqld
+RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
-# #____________________________________________________________
-# # Set environment variables for MariaDB
-# ENV MYSQL_ROOT_PASSWORD=rootpassword
+COPY tools/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# # Expose MariaDB port
-# EXPOSE 3306
+ENTRYPOINT ["/entrypoint.sh"]
 
-# # Run initialization and start MariaDB server
-# CMD ["sh", "-c", "mysql -u root -p$MYSQL_ROOT_PASSWORD < /usr/local/bin/db_init.sql && mysqld"]
+# CMD ["mysqld"]
+# CMD ["mysqld_safe"]
