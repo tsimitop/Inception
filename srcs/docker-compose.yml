@@ -3,10 +3,10 @@ services:
     build: ./requirements/nginx
     container_name: nginx
     ports:
-      - "80:80"
+      # - "80:80"
       - "443:443"
     volumes:
-      - ./wordpress_vol:/var/www/html
+      - wordpress_vol:/var/www/html
     depends_on:
       - wordpress
       - mariadb
@@ -20,7 +20,7 @@ services:
     build: ./requirements/wordpress
     container_name: wordpress
     volumes:
-      - ./wordpress_vol:/var/www/html
+      - wordpress_vol:/var/www/html
     env_file:
       - .env
     depends_on:
@@ -28,8 +28,8 @@ services:
     restart: on-failure
     networks:
       inception:
-    expose:
-      - "9000"
+    # expose:
+    #   - "9000"
 
   mariadb:
     build: ./requirements/mariadb
@@ -47,4 +47,14 @@ networks:
 
 volumes:
   wordpress_vol:
+    driver: local
+    driver_opts:
+      type: "none"
+      device: "$HOME/data/wordpress_vol"
+      o: "bind"
   mariadb_vol:
+    driver: local
+    driver_opts:
+      type: "none"
+      device: "$HOME/data/mariadb_vol"
+      o: "bind"

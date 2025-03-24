@@ -1,4 +1,6 @@
-all: create_env build_all
+VOLUMES_PATH = $(HOME)/data
+
+all: create_env create_path build_all
 
 create_env:
 	@if [ -f "srcs/.env" ]; then \
@@ -7,6 +9,10 @@ create_env:
 		echo "Creating .env"; \
 		python3 srcs/environment.py; \
 	fi
+
+create_path:
+	mkdir -p $(VOLUMES_PATH)/wordpress_vol
+	mkdir -p $(VOLUMES_PATH)/mariadb_vol
 
 logs: 
 	docker logs nginx && docker logs mariadb && docker logs wordpress

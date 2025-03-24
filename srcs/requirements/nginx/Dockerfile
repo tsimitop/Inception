@@ -6,7 +6,7 @@ RUN	mkdir -p /etc/nginx/ssl /var/www/html && \
 	openssl req \
 	-x509 \
 	-nodes \
-	# -days 365 -newkey rsa:2048 \
+	-days 365 -newkey rsa:2048 \
 	-out /etc/nginx/ssl/inception.crt \
 	-keyout /etc/nginx/ssl/inception.key \
 	-subj "/C=DE/ST=Baden-Wuttemberg/L=Heilbronn/O=Anonymous.inc/OU=supersecret/CN=tsimitop.42.fr"

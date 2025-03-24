@@ -5,4 +5,4 @@ set -e
 /etc/mysql/db_script.sh
 
 # Start MariaDB
-exec mysqld
+mysqld
