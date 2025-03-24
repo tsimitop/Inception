@@ -2,6 +2,16 @@ import os
 import shutil
 import re
 
+# Function to get the password from a file
+def get_password_from_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return file.read().strip()  # Read and strip any extra whitespace
+    except FileNotFoundError:
+        raise Exception(f"Password file not found at {file_path}")
+    except Exception as e:
+        raise Exception(f"Error reading password from file: {e}")
+
 def get_non_empty_input(prompt):
 	"""Prompt the user until they provide a non-empty input."""
 	while True:
@@ -11,18 +21,22 @@ def get_non_empty_input(prompt):
 		print("This field cannot be empty. Please enter a valid value.")
 
 def prompt_input(prompt, default_value):
-    user_input = input(f"{prompt} (default: {default_value}): ")
+    user_input = input(f"{prompt}")
     return user_input if user_input else default_value
 
 
 WP_ADMIN_USER = prompt_input("Enter name for wordpress admin (default: thalia): ", "thalia")
-WP_ADMIN_PASSWORD = get_non_empty_input("Enter password for wordpress admin: ")
+default_password = get_password_from_file("secrets/credentials.txt")
+WP_ADMIN_PASSWORD = prompt_input("Enter password for wordpress admin: ", default_password)
 WP_ADMIN_EMAIL = prompt_input("Enter email for wordpress admin (default: thalia@thalia.com): ", "thalia@thalia.com")
 WP_DB_USER = prompt_input("Enter user of database (default: wpuser): ", "wpuser")
-WP_DB_PASSWORD = get_non_empty_input("Enter password of database: ")
-WP_ROOT_DB_PASSWORD = get_non_empty_input("Enter password of database root: ")
+default_password = get_password_from_file("secrets/db_password.txt")
+WP_DB_PASSWORD = prompt_input("Enter password for wordpress admin: ", default_password)
+default_password = get_password_from_file("secrets/db_root_password.txt")
+WP_ROOT_DB_PASSWORD = prompt_input("Enter password of database root: ", default_password)
 WP_USER = prompt_input("Enter worpress user (default: dummy): ", "dummy")
-WP_PASS = get_non_empty_input("Enter WP_PASS: ")
+default_password = get_password_from_file("secrets/credentials.txt")
+WP_PASS = prompt_input("Enter password for wordpress user: ", default_password)
 WP_EMAIL = prompt_input("Enter worpress user email (default: dummy@dummy.com): ", "dummy@dummy.com")
 
 with open(".env", "w") as environment_template:
