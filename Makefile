@@ -2,12 +2,15 @@ VOLUMES_PATH = $(HOME)/data
 
 all: create_env create_path build_all
 
+down:
+	cd srcs && docker-compose down -v
+
 create_env:
 	@if [ -f "srcs/.env" ]; then \
 		echo ".env exists"; \
 	else \
 		echo "Creating .env"; \
-		python3 srcs/environment.py; \
+		python3 srcs/requirements/tools/environment.py; \
 	fi
 
 create_path:
@@ -24,7 +27,7 @@ delete_env:
 	cd srcs && rm .env
 
 delete_volumes:
-	cd srcs/ && rm -rf wordpress_vol && cd .. && docker volume rm srcs_mariadb_vol 
+	docker volume rm srcs_mariadb_vol && docker volume rm srcs_wordpress_vol && cd $(VOLUMES_PATH) && rm -rf mariadb_vol && rm -rf wordpress_vol
 #srcs_wordpress_vol
 
 # enter database prompt
