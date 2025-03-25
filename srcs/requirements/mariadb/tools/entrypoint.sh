@@ -1,7 +1,6 @@
 #!/bin/bash
-set -e
 
-# Run the initialization script
+# set -e
 /etc/mysql/db_script.sh
 
 # Start MariaDB

@@ -11,12 +11,4 @@ COPY ./tools/wp-init.sh .
 
 RUN chmod +x wp-init.sh
 
-# EXPOSE 443
-
 CMD ["./wp-init.sh"]
-
-# RUN mkdir -p /var/www/html && \
-#     chown -R www-data:www-data /var/www/html && \
-#     chmod -R 755 /var/www/html
-
-# CMD ["php-fpm7.4", "-F"]

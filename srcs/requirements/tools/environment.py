@@ -6,19 +6,11 @@ import re
 def get_password_from_file(file_path):
     try:
         with open(file_path, 'r') as file:
-            return file.read().strip()  # Read and strip any extra whitespace
+            return file.read().strip()  # Rm extra whitespace
     except FileNotFoundError:
         raise Exception(f"Password file not found at {file_path}")
     except Exception as e:
         raise Exception(f"Error reading password from file: {e}")
-
-def get_non_empty_input(prompt):
-	"""Prompt the user until they provide a non-empty input."""
-	while True:
-		value = input(prompt).strip()
-		if value:
-			return value
-		print("This field cannot be empty. Please enter a valid value.")
 
 def prompt_input(prompt, default_value):
     user_input = input(f"{prompt}")

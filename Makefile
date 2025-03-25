@@ -2,6 +2,7 @@ VOLUMES_PATH = $(HOME)/data
 
 all: create_env create_path build_all
 
+# Create .env file
 create_env:
 	@if [ -f "srcs/.env" ]; then \
 		echo ".env exists"; \
@@ -10,6 +11,7 @@ create_env:
 		python3 srcs/requirements/tools/environment.py; \
 	fi
 
+# Create necessary directories
 create_path:
 	mkdir -p $(VOLUMES_PATH)/wordpress_vol
 	mkdir -p $(VOLUMES_PATH)/mariadb_vol
