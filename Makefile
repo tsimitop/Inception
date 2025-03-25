@@ -2,9 +2,6 @@ VOLUMES_PATH = $(HOME)/data
 
 all: create_env create_path build_all
 
-down:
-	cd srcs && docker-compose down -v
-
 create_env:
 	@if [ -f "srcs/.env" ]; then \
 		echo ".env exists"; \
@@ -17,78 +14,74 @@ create_path:
 	mkdir -p $(VOLUMES_PATH)/wordpress_vol
 	mkdir -p $(VOLUMES_PATH)/mariadb_vol
 
-logs: 
-	docker logs nginx && docker logs mariadb && docker logs wordpress
+# Build images using cache
+build:
+	cd srcs && docker-compose build
 
-abolish: sr_all delete_volumes
-	cd srcs && rm .env
-
-delete_env:
-	cd srcs && rm .env
-
-delete_volumes:
-	docker volume rm srcs_mariadb_vol && docker volume rm srcs_wordpress_vol && cd $(VOLUMES_PATH) && rm -rf mariadb_vol && rm -rf wordpress_vol
-#srcs_wordpress_vol
-
-# enter database prompt
-# docker exec -it mariadb mysql -u root -p
-# __________________________GENERAL__________________________
-
+# Build images without cache
 rebuild:
 	cd srcs && docker-compose build --no-cache
 
+# Start services without rebuilding
+up:
+	cd srcs && docker-compose up -d
+
+# Build images and start services
 build_all:
 	cd srcs && docker-compose up -d --build
 
+# Start services without building
 build_fast:
 	cd srcs && docker-compose up -d
 
-sr_all: nsr wpsr msr
+# Stop and remove containers
+down:
+	cd srcs && docker-compose down
 
-# interact_all:
-# 	docker exec -it /bin/bash
+# Restart containers without rebuilding
+restart:
+	cd srcs && docker-compose down && docker-compose up -d
 
-# ___________________________NGINX___________________________
-ssh-nginx:
-	docker-compose -f srcs/docker-compose.yml exec nginx bash
+# Completely reset environment (remove containers, volumes and networks)
+reset:
+	cd srcs && docker-compose down -v --remove-orphans
+	cd srcs && docker-compose up -d --build
 
-build_nginx:
-	cd srcs/requirements/nginx && docker-compose up -d --build
+# Show logs
+logs: 
+	docker logs nginx && docker logs mariadb && docker logs wordpress
 
-nstop:
-	cd srcs/requirements/nginx && docker stop nginx
+# Delete .env file
+delete_env:
+	cd srcs && rm .env
 
-nrm:
-	cd srcs/requirements/nginx && docker rm nginx
+# Delete volumes
+delete_volumes:
+	docker volume rm srcs_mariadb_vol && docker volume rm srcs_wordpress_vol && cd $(VOLUMES_PATH) && rm -rf mariadb_vol && rm -rf wordpress_vol
 
-nsr:
-	cd srcs/requirements/nginx && docker stop nginx && docker rm nginx
-
-ninteract:
+# Interact with nginx
+interact_nginx:
 	docker exec -it nginx /bin/bash
-# _________________________WORDPRESS__________________________
-ssh-wp:
-	docker-compose -f srcs/docker-compose.yml exec wp bash
 
-build_wp:
-	cd srcs/requirements/wordpress && docker-compose up -d --build
-
-wpstop:
-	cd srcs/requirements/wordpress && docker stop wordpress
-
-wprm:
-	cd srcs/requirements/wordpress && docker rm wordpress
-
-wpsr:
-	cd srcs/requirements/wordpress && docker stop wordpress && docker rm wordpress
-
-wpinteract:
-	docker exec -it wordpress /bin/bash
-
-# __________________________MARIADB___________________________
-
-minteract:
+# Interact with mariadb
+interact_mariadb:
 	docker exec -it mariadb /bin/bash
 
-msr:
-	cd srcs/requirements/mariadb && docker stop mariadb && docker rm mariadb
+# Interact with wordpress
+interact_wordpress:
+	docker exec -it wordpress /bin/bash
+
+# Navigate mariadb
+enter_db_prompt:
+	docker exec -it mariadb mysql -u root -p
+
+clean: down
+
+fclean:
+	cd srcs && docker-compose down -v --remove-orphans
+	cd srcs && docker system prune -af --volumes
+
+re: fclean all
+
+# eval_rule:
+# 	docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null

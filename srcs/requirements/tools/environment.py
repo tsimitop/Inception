@@ -35,7 +35,7 @@ WP_DB_PASSWORD = prompt_input("Enter password for wordpress admin: ", default_pa
 default_password = get_password_from_file("secrets/db_root_password.txt")
 WP_ROOT_DB_PASSWORD = prompt_input("Enter password of database root: ", default_password)
 WP_USER = prompt_input("Enter worpress user (default: dummy): ", "dummy")
-default_password = get_password_from_file("secrets/credentials.txt")
+default_password = get_password_from_file("secrets/wp_user.txt")
 WP_PASS = prompt_input("Enter password for wordpress user: ", default_password)
 WP_EMAIL = prompt_input("Enter worpress user email (default: dummy@dummy.com): ", "dummy@dummy.com")
 
