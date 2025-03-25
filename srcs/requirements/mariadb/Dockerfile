@@ -14,4 +14,6 @@ RUN mkdir -p /run/mysqld
 COPY tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+EXPOSE 3306
+
 ENTRYPOINT ["/entrypoint.sh"]

@@ -11,4 +11,6 @@ COPY ./tools/wp-init.sh .
 
 RUN chmod +x wp-init.sh
 
+EXPOSE 9000
+
 CMD ["./wp-init.sh"]

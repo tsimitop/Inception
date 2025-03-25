@@ -33,7 +33,7 @@ WP_EMAIL = prompt_input("Enter worpress user email (default: dummy@dummy.com): "
 
 with open(".env", "w") as environment_template:
 	environment_template.write(f"WP_DB_NAME=wordpress\n")
-	environment_template.write(f"WP_DB_HOST=mariadb\n")
+	environment_template.write(f"WP_DB_HOST=mariadb:3306\n")
 	environment_template.write(f"WP_TITLE=inception\n")
 	environment_template.write(f"WP_URL=tsimitop.42.fr\n")
 	environment_template.write(f"WP_ADMIN_USER={WP_ADMIN_USER}\n")
